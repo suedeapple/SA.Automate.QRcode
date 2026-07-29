@@ -8,7 +8,7 @@ namespace SA.Automate.QRcode.Connection;
 [ConnectionType("qrCode", "QR Code",
     Description = "Generate QR codes",
     Group = "QR Codes",
-    Icon = "icon-barcode")]
+    Icon = "icon-plugin")]
 public sealed class QrCodeConnectionType : ConnectionTypeBase<QrCodeConnectionSettings>
 {
     public QrCodeConnectionType(ConnectionTypeInfrastructure infrastructure)

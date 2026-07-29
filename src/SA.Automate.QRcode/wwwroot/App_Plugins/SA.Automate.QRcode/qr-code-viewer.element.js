@@ -1,6 +1,7 @@
 import { css, html, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
+import { umbConfirmModal } from '@umbraco-cms/backoffice/modal';
 
 /**
  * Read-only viewer for a QR code stored as a data URI, raw base64 PNG, or SVG markup. Offers a
@@ -12,8 +13,18 @@ export class SaQrCodeViewerElement extends UmbLitElement {
 		value: { type: String },
 	};
 
-	#onRemove() {
-		if (!confirm('Remove this QR code? This cannot be undone until you save.')) return;
+	async #onRemove() {
+		try {
+			await umbConfirmModal(this, {
+				headline: 'Remove QR code',
+				content: 'Are you sure you want to remove this QR code?',
+				color: 'danger',
+				confirmLabel: 'Remove',
+			});
+		} catch {
+			return; // user cancelled
+		}
+
 		this.value = undefined;
 		this.dispatchEvent(new UmbChangeEvent());
 	}
@@ -31,22 +42,45 @@ export class SaQrCodeViewerElement extends UmbLitElement {
 
 	render() {
 		if (!this.value) {
-			return html`<p class="empty">No QR code generated yet.</p>`;
+			return html`<div class="empty">No QR code generated.</div>`;		
 		}
 
 		return html`
-			${this.#renderImage()}
-			<uui-button label="Remove" look="secondary" color="danger" @click=${() => this.#onRemove()}></uui-button>
+			<div class="qr-image">
+				${this.#renderImage()}
+				<uui-action-bar class="actions">
+					<uui-button label="Remove" look="secondary" @click=${() => this.#onRemove()}>
+						<uui-icon name="icon-trash"></uui-icon>
+					</uui-button>
+				</uui-action-bar>
+			</div>
 		`;
 	}
 
 	static styles = css`
+		.qr-image {
+			position: relative;
+			display: inline-block;
+		}
+
+		.qr-image .actions {
+			position: absolute;
+			top: var(--uui-size-space-2);
+			right: var(--uui-size-space-2);
+			opacity: 0;
+			transition: opacity 120ms ease-in-out;
+		}
+
+		.qr-image:hover .actions,
+		.qr-image:focus-within .actions {
+			opacity: 1;
+		}
+
 		img,
 		.qr-svg svg {
 			display: block;
 			max-width: 200px;
 			max-height: 200px;
-			margin-bottom: var(--uui-size-space-3);
 		}
 
 		.empty {

@@ -42,6 +42,12 @@ API key or external service, since QR codes are generated locally.
 
 ## Usage
 
+There are two ways to get a generated QR code onto a content item: as the raw string (via the
+**QR Code Viewer** property editor) or as an actual Media item (via **Save QR Code to Media**).
+**Prefer the text string approach** (`Generate QR Code` → `Update Content Property` → **QR Code
+Viewer**) unless you specifically need a Media item — it's lightweight, since it just stores a
+string on the content item, with no extra Media item created or file stored on disk.
+
 ### Generate QR Code
 
 Add the **Generate QR Code** action to any automation and select the connection to use. Available fields:
@@ -64,6 +70,32 @@ The action outputs the following, which can be referenced via bindings in later 
 | OutputFormat | The output format the QR code was rendered in, e.g. `PngDataUri`. |
 | QrCode | The generated QR code content: a `data:image/png;base64,...` URI, a raw base64 string, or SVG markup, depending on the output format. |
 | MimeType | The MIME type of the generated QR code, e.g. `image/png` or `image/svg+xml`. |
+
+### Save QR Code to Media
+
+Add the **Save QR Code to Media** action to save a generated QR code as an actual Media item —
+useful for feeding it into a Media Picker property, or anywhere else that needs a real media
+reference rather than a raw string. Available fields:
+
+| Field | Description |
+|---|---|
+| Value | The QR code content to save as media — typically bound from **Generate QR Code**'s `QrCode` output. Accepts a PNG data URI, raw base64 PNG, or SVG markup. |
+| Media Folder | Optional. The folder to save the media item in. Leave unset to save at the root of the Media library. |
+| File Name | Optional. The name for the media item, without extension — the correct extension is added automatically. Leave unset to auto-generate one. Supports `${ binding }` expressions. |
+
+PNG content is saved as an `Image` media item; SVG content is saved as a `Vector Graphics (SVG)`
+media item — Umbraco's built-in media type for SVGs.
+
+The action outputs the following, which can be referenced via bindings in later workflow steps:
+
+| Output | Description |
+|---|---|
+| MediaId | The numeric Id of the created media item. |
+| MediaKey | The Key (GUID) of the created media item. |
+| MediaUdi | The media item's UDI, e.g. `umb://media/...`. Bind this directly into a Media Picker property — no formatting needed. |
+
+Typical chain: **Generate QR Code** → **Save QR Code to Media** (bind `QrCode` to `Value`) →
+**Update Content Property** on a Media Picker property (bind `MediaUdi`).
 
 ## Property editors
 

@@ -19,8 +19,9 @@ public class QrCodeComposer : IComposer
         builder.WithCollectionBuilder<ConnectionTypeCollectionBuilder>()
             .Add<QrCodeConnectionType>();
 
-        // Register the Generate QR Code action so it is available in Umbraco Automate workflows
+        // Register the QR Code actions so they are available in Umbraco Automate workflows
         builder.WithCollectionBuilder<ActionCollectionBuilder>()
-            .Add<GenerateQrCodeAction>();
+            .Add<GenerateQrCodeAction>()
+            .Add<SaveQrCodeToMediaAction>();
     }
 }
