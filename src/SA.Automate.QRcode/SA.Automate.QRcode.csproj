@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+    <PackageId>SA.Automate.QRcode</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>suedeapple</Authors>
+    <Company>suedeapple</Company>
+    <Description>QR code generation actions for Umbraco Automate, powered by QRCoder.</Description>
+    <PackageTags>umbraco;automate;qrcode;qrcoder;umbraco-marketplace</PackageTags>
+    <PackageProjectUrl>https://github.com/suedeapple/SA.Automate.QRcode</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/suedeapple/SA.Automate.QRcode</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>saAutomateQRCoder.png</PackageIcon>
+
+    <!-- Pack settings -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<PackageReference Include="Umbraco.Automate.Core" Version="[17.0.0-beta, 19.0.0)" />
+	<PackageReference Include="Umbraco.Cms.Core" Version="[17.4.0, 19.0.0)" />
+	<PackageReference Include="QRCoder" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\.github\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\saAutomateQRCoder.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
