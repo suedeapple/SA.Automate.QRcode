@@ -114,6 +114,31 @@ Once the workflow runs and the content is saved, the property displays the gener
 Editors can remove it (and save/publish) to clear it, but can't set a new value directly — that
 always goes through the workflow.
 
+## Rendering in views
+
+This package also registers a `<qr-code>` Tag Helper for rendering an already-generated QR code
+string (e.g. a QR Code Viewer property's value, or `Generate QR Code`'s `QrCode` output) on the
+front end. It doesn't generate anything itself — no QRCoder call, no Automate involved — it just
+renders whatever string you give it as an `<img>` or inline `<svg>`, whichever the value actually is.
+
+Register it once in `_ViewImports.cshtml`:
+
+```cshtml
+@addTagHelper *, SA.Automate.QRcode
+```
+
+Then use it in any view:
+
+```cshtml
+<qr-code value="@Model.Value<string>("qrCode")" class="qr-code" width="200" height="200" alt="Scan to view" />
+```
+
+`value` and `alt` are the only special attributes — everything else you write on the tag (`class`,
+`width`, `height`, `data-*`, or anything else) passes straight through to the rendered element.
+Inline SVG has no native `alt` attribute, so when the underlying value is SVG markup, `alt` is
+applied as `role="img" aria-label="..."` on the `<svg>` instead — same accessibility intent as an
+`<img alt>`, just via the SVG-appropriate mechanism.
+
 ## Compatibility
 
 | Package version | Umbraco Automate | Umbraco CMS |
