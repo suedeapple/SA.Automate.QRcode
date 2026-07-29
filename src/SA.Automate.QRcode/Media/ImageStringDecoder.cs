@@ -4,7 +4,7 @@ using Umbraco.Cms.Core;
 namespace SA.Automate.QRcode.Media;
 
 /// <summary>
-/// Decodes a QR code content string (a PNG data URI, raw base64 PNG, or SVG markup — the formats
+/// Decodes a QR code content string (raw base64 PNG, a PNG data URI, or SVG markup — the formats
 /// produced by <see cref="QrCode.QrCodeRenderer"/>) into raw bytes plus the file extension and
 /// Umbraco media type alias to save it as.
 /// </summary>

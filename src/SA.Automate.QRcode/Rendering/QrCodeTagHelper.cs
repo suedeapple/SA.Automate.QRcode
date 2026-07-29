@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace SA.Automate.QRcode.Rendering;
 
 /// <summary>
-/// Renders an already-generated QR code string (a PNG data URI, raw base64 PNG, or SVG markup —
+/// Renders an already-generated QR code string (raw base64 PNG, a PNG data URI, or SVG markup —
 /// e.g. from the QR Code Viewer property or Generate QR Code's <c>QrCode</c> output) as an
 /// <c>&lt;img&gt;</c> or inline <c>&lt;svg&gt;</c>. Any attribute besides <c>value</c>/<c>alt</c>
 /// written on the tag (e.g. <c>class</c>, <c>width</c>, <c>height</c>) passes through untouched.

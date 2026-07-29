@@ -13,7 +13,7 @@ public class SaveQrCodeToMediaSettings
     [Required(ErrorMessage = "Value is required.")]
     [Field(
         Label = "Value",
-        Description = "The QR code content to save as media — typically bound from the Generate QR Code action's QrCode output. Accepts a PNG data URI, raw base64 PNG, or SVG markup.",
+        Description = "The QR code content to save as media - typically bound from the Generate QR Code action's QrCode output. Accepts raw base64 PNG or SVG markup.",
         SupportsBindings = true,
         SortOrder = 1)]
     public string Value { get; set; } = string.Empty;

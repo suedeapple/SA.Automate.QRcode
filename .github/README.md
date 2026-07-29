@@ -55,7 +55,7 @@ Add the **Generate QR Code** action to any automation and select the connection 
 | Field | Description |
 |---|---|
 | Value | The value to encode as a QR code — a URL, `tel:`/`mailto:`/`sms:` link, plain text, or anything else a scanner understands. Supports `${ binding }` expressions. Max 2000 characters. |
-| Output Format | Optional. `PngDataUri`, `RawBase64Png`, or `Svg`. Defaults to `PngDataUri` if left unset. |
+| Output Format | Optional. `RawBase64Png` or `Svg`. Defaults to `RawBase64Png` if left unset. |
 | Size (pixels per module) | Optional. The size of each QR module in pixels, from 1 to 50. Only applies to PNG output. Defaults to 20. |
 | Error Correction Level | Optional. `L`, `M`, `Q`, or `H`. Higher levels tolerate more damage/obstruction but produce denser codes. Defaults to `Q`. |
 | Dark Color | Optional. The color of the dark modules, e.g. `#000000`. Defaults to black. |
@@ -67,8 +67,8 @@ The action outputs the following, which can be referenced via bindings in later 
 | Output | Description |
 |---|---|
 | Value | The value that was encoded in the QR code. |
-| OutputFormat | The output format the QR code was rendered in, e.g. `PngDataUri`. |
-| QrCode | The generated QR code content: a `data:image/png;base64,...` URI, a raw base64 string, or SVG markup, depending on the output format. |
+| OutputFormat | The output format the QR code was rendered in, e.g. `RawBase64Png`. |
+| QrCode | The generated QR code content: a raw base64 string, a `data:image/png;base64,...` URI, or SVG markup, depending on the output format. |
 | MimeType | The MIME type of the generated QR code, e.g. `image/png` or `image/svg+xml`. |
 
 ### Save QR Code to Media
@@ -79,7 +79,7 @@ reference rather than a raw string. Available fields:
 
 | Field | Description |
 |---|---|
-| Value | The QR code content to save as media — typically bound from **Generate QR Code**'s `QrCode` output. Accepts a PNG data URI, raw base64 PNG, or SVG markup. |
+| Value | The QR code content to save as media — typically bound from **Generate QR Code**'s `QrCode` output. Accepts raw base64 PNG or SVG markup. |
 | Media Folder | Optional. The folder to save the media item in. Leave unset to save at the root of the Media library. |
 | File Name | Optional. The name for the media item, without extension — the correct extension is added automatically. Leave unset to auto-generate one. Supports `${ binding }` expressions. |
 

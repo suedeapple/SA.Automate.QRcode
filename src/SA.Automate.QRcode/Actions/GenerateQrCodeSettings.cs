@@ -25,9 +25,9 @@ public class GenerateQrCodeSettings
     /// </summary>
     [Field(
         Label = "Output Format",
-        Description = "PngDataUri, RawBase64Png, or Svg. Defaults to PNG Data URI if left unset.",
+        Description = "RawBase64Png or Svg. Defaults to RawBase64Png if left unset.",
         EditorUiAlias = "Umb.PropertyEditorUi.Dropdown",
-        EditorConfig = """[{ "alias": "items", "value": ["PngDataUri", "RawBase64Png", "Svg"] }]""",
+        EditorConfig = """[{ "alias": "items", "value": ["RawBase64Png", "Svg"] }]""",
         SortOrder = 2)]
     public string? OutputFormat { get; set; }
 
