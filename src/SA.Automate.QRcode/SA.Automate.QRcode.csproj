@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <None Include="..\..\.github\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\..\.github\images\example-qr.svg" Pack="true" PackagePath="images\" />
     <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     <None Include="..\..\saAutomateQRCoder.png" Pack="true" PackagePath="\" />
   </ItemGroup>
