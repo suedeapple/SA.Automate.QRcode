@@ -16,4 +16,12 @@ public sealed class GenerateQrCodeOutput
 
     /// <summary>Gets the MIME type of the generated QR code, e.g. "image/png" or "image/svg+xml".</summary>
     public string? MimeType { get; init; }
+
+    /// <summary>
+    /// Gets a JSON payload combining <see cref="Value"/> and <see cref="QrCode"/>, e.g.
+    /// <c>{"value":"...","qrCode":"..."}</c>. Bind this directly onto a QR Code Viewer property
+    /// instead of <see cref="QrCode"/> when the property should also display the encoded value as
+    /// text alongside the code.
+    /// </summary>
+    public string? QrCodeViewerValue { get; init; }
 }

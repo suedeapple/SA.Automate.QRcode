@@ -68,6 +68,9 @@ The generated string is written straight onto a content property that uses the *
 editor, which displays it. No Media item is created and no file is written to disk — just a string
 on the content item. Use this unless you specifically need a Media item, per Option 2.
 
+Bind `QrCode` for the image on its own, or `QrCodeViewerValue` if you also want the encoded value
+displayed as text underneath it.
+
 **Option 2: Save it as a Media item**
 
 `Generate QR Code` → `Save QR Code to Media` → `Update Content Property` (bind `MediaUdi` to a
@@ -101,6 +104,7 @@ The action outputs the following, which can be referenced via bindings in later 
 | OutputFormat | The output format the QR code was rendered in, e.g. `RawBase64Png`. |
 | QrCode | The generated QR code content: a raw base64 PNG string, or SVG markup, depending on the output format. |
 | MimeType | The MIME type of the generated QR code, e.g. `image/png` or `image/svg+xml`. |
+| QrCodeViewerValue | A JSON payload combining `Value` and `QrCode` (`{"value":"...","qrCode":"..."}`). Bind this instead of `QrCode` onto a **QR Code Viewer** property to also display the encoded value as text underneath the code. |
 
 ### Save QR Code to Media
 
@@ -145,12 +149,18 @@ Once the workflow runs and the content is saved, the property displays the gener
 Editors can remove it (and save/publish) to clear it, but can't set a new value directly — that
 always goes through the workflow.
 
+Bind `QrCodeViewerValue` instead of `QrCode` in step 3 to also show the encoded value as text
+underneath the code — handy when the code alone (e.g. a URL) isn't obviously meaningful at a
+glance.
+
 ## Rendering in views
 
 This package also registers a `<qr-code>` Tag Helper for rendering an already-generated QR code
 string (e.g. a QR Code Viewer property's value, or `Generate QR Code`'s `QrCode` output) on the
 front end. It doesn't generate anything itself — no QRCoder call, no Automate involved — it just
 renders whatever string you give it as an `<img>` or inline `<svg>`, whichever the value actually is.
+It also accepts a QR Code Viewer property whose value is the `QrCodeViewerValue` JSON payload —
+it renders just the code and ignores the encoded value in that case.
 
 Register it once in `_ViewImports.cshtml`:
 

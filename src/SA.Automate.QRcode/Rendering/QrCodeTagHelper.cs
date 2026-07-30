@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -6,8 +7,10 @@ namespace SA.Automate.QRcode.Rendering;
 /// <summary>
 /// Renders an already-generated QR code string (raw base64 PNG, a PNG data URI, or SVG markup —
 /// e.g. from the QR Code Viewer property or Generate QR Code's <c>QrCode</c> output) as an
-/// <c>&lt;img&gt;</c> or inline <c>&lt;svg&gt;</c>. Any attribute besides <c>value</c>/<c>alt</c>
-/// written on the tag (e.g. <c>class</c>, <c>width</c>, <c>height</c>) passes through untouched.
+/// <c>&lt;img&gt;</c> or inline <c>&lt;svg&gt;</c>. Also accepts the <c>{"value":"...","qrCode":"..."}</c>
+/// JSON payload produced by Generate QR Code's <c>QrCodeViewerValue</c> output — only the code is
+/// rendered, the value is ignored. Any attribute besides <c>value</c>/<c>alt</c> written on the
+/// tag (e.g. <c>class</c>, <c>width</c>, <c>height</c>) passes through untouched.
 /// </summary>
 [HtmlTargetElement("qr-code")]
 public class QrCodeTagHelper : TagHelper
@@ -26,12 +29,36 @@ public class QrCodeTagHelper : TagHelper
             return;
         }
 
-        var trimmed = Value.Trim();
+        var trimmed = ExtractQrCode(Value.Trim());
 
         if (trimmed.StartsWith("<svg", StringComparison.OrdinalIgnoreCase))
             RenderSvg(trimmed, output);
         else
             RenderImg(trimmed, output);
+    }
+
+    /// <summary>
+    /// Unwraps the <c>{"value":"...","qrCode":"..."}</c> payload from <c>QrCodeViewerValue</c>,
+    /// if that's what was bound, down to just the code. Falls back to the input unchanged for a
+    /// plain code string (the common case) or malformed JSON.
+    /// </summary>
+    private static string ExtractQrCode(string value)
+    {
+        if (!value.StartsWith('{'))
+            return value;
+
+        try
+        {
+            using var document = JsonDocument.Parse(value);
+            if (document.RootElement.TryGetProperty("qrCode", out var qrCode) && qrCode.ValueKind == JsonValueKind.String)
+                return qrCode.GetString() ?? value;
+        }
+        catch (JsonException)
+        {
+            // not JSON after all — treat as a plain code string
+        }
+
+        return value;
     }
 
     private void RenderImg(string value, TagHelperOutput output)

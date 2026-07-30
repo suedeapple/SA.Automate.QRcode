@@ -1,3 +1,4 @@
+using System.Text.Json;
 using QRCoder;
 using SA.Automate.QRcode.QrCode;
 using Umbraco.Automate.Core.Actions;
@@ -14,6 +15,11 @@ namespace SA.Automate.QRcode.Actions;
     ConnectionTypeAlias = "qrCode")]
 public class GenerateQrCodeAction : ActionBase<GenerateQrCodeSettings, GenerateQrCodeOutput>
 {
+    private static readonly JsonSerializerOptions ViewerValueJsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
+
     public GenerateQrCodeAction(ActionInfrastructure infrastructure)
         : base(infrastructure)
     {
@@ -45,12 +51,17 @@ public class GenerateQrCodeAction : ActionBase<GenerateQrCodeSettings, GenerateQ
                 settings.LightColor ?? "#FFFFFF",
                 settings.IncludeQuietZone);
 
+            var viewerValue = JsonSerializer.Serialize(
+                new QrCodeViewerPayload(settings.Value, content),
+                ViewerValueJsonOptions);
+
             return Task.FromResult(Success(new GenerateQrCodeOutput
             {
                 Value = settings.Value,
                 OutputFormat = outputFormat.ToString(),
                 QrCode = content,
                 MimeType = mimeType,
+                QrCodeViewerValue = viewerValue,
             }));
         }
         catch (Exception ex)
@@ -61,4 +72,6 @@ public class GenerateQrCodeAction : ActionBase<GenerateQrCodeSettings, GenerateQ
 
     private static TEnum? ParseEnum<TEnum>(string? value) where TEnum : struct, Enum =>
         Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed) ? parsed : null;
+
+    private sealed record QrCodeViewerPayload(string Value, string QrCode);
 }
