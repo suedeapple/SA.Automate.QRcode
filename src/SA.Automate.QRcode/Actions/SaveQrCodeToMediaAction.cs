@@ -10,10 +10,10 @@ using Umbraco.Extensions;
 namespace SA.Automate.QRcode.Actions;
 
 /// <summary>
-/// Umbraco Automate action that saves a QR code as a Media item.
+/// Umbraco Automate action that converts a generated QR code string into a Media item.
 /// </summary>
 [Action("qrCode.SaveQrCodeToMedia", "Save QR Code to Media",
-    Description = "Saves a QR code as a Media item",
+    Description = "Converts a generated QR code string into a Media item",
     Group = "QR Code",
     Icon = "icon-barcode",
     ConnectionTypeAlias = "qrCode")]

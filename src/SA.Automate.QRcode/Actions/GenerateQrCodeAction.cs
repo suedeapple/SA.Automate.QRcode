@@ -30,7 +30,7 @@ public class GenerateQrCodeAction : ActionBase<GenerateQrCodeSettings, GenerateQ
     {
         var settings = context.GetSettings<GenerateQrCodeSettings>();
 
-        var outputFormat = ParseEnum<QrCodeOutputFormat>(settings.OutputFormat) ?? QrCodeOutputFormat.RawBase64Png;
+        var outputFormat = ParseEnum<QrCodeOutputFormat>(settings.OutputFormat) ?? QrCodeOutputFormat.Svg;
 
         var eccLevel = ParseEnum<QRCodeGenerator.ECCLevel>(settings.ErrorCorrectionLevel) ?? QRCodeGenerator.ECCLevel.Q;
 

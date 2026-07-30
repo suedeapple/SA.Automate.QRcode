@@ -6,6 +6,16 @@
 
 QR code generation actions for [Umbraco Automate](https://github.com/umbraco/Umbraco.Automate), powered by [QRCoder](https://github.com/Shane32/QRCoder). Generate a QR code for any value as part of an automation workflow.
 
+## What's included
+
+| Component | What it does |
+|---|---|
+| **QR Code** connection type | Registers the connection the two actions below run under. Nothing to configure. |
+| **Generate QR Code** action | Encodes a value (URL, text, `tel:`/`mailto:`/etc.) as a QR code — SVG markup or base64 PNG. |
+| **Save QR Code to Media** action | Saves a generated QR code as a real Media item (`Image` or `Vector Graphics (SVG)`). |
+| **QR Code Viewer** property editor | Read-only content property that displays a QR code written to it by a workflow. |
+| `<qr-code>` Tag Helper | Renders an already-generated QR code string as an `<img>` or inline `<svg>` in a Razor view. |
+
 ## What can this be used for?
 
 This package is useful when you want to generate a QR code inside an Umbraco Automate workflow, for example:
@@ -14,10 +24,14 @@ This package is useful when you want to generate a QR code inside an Umbraco Aut
 - **Notifications**: embed a QR code linking to a page in an email or message sent by another action.
 - **Print/export flows**: produce a scannable code for a URL, reference number, or other value as part of a larger export or document-generation automation.
 
-The value isn't limited to URLs — anything a QR scanner understands works, e.g. a phone number
-(`tel:+441234567890`), an email address (`mailto:someone@example.com`), an SMS
-(`sms:+441234567890`), Wi-Fi credentials (`WIFI:S:MyNetwork;T:WPA;P:MyPassword;;`), or just plain
-text.
+The value isn't limited to URLs — anything a QR scanner understands works, e.g.:
+
+- A URL, with the domain prefixed since content URLs are relative: `https://www.example.com${ steps.getContent.url }`
+- A phone number: `tel:+441234567890`
+- An email address: `mailto:someone@example.com`
+- An SMS: `sms:+441234567890`
+- Wi-Fi credentials: `WIFI:S:MyNetwork;T:WPA;P:MyPassword;;`
+- Or just plain text
 
 ## Installation
 
@@ -42,11 +56,28 @@ API key or external service, since QR codes are generated locally.
 
 ## Usage
 
-There are two ways to get a generated QR code onto a content item: as the raw string (via the
-**QR Code Viewer** property editor) or as an actual Media item (via **Save QR Code to Media**).
-**Prefer the text string approach** (`Generate QR Code` → `Update Content Property` → **QR Code
-Viewer**) unless you specifically need a Media item — it's lightweight, since it just stores a
-string on the content item, with no extra Media item created or file stored on disk.
+`Generate QR Code` produces a string — SVG markup or base64 PNG — that on its own isn't attached to
+anything. There are two ways to get it onto a content item, and which one you want depends on what
+happens to it next:
+
+**Option 1: Store the string directly (recommended default)**
+
+`Generate QR Code` → `Update Content Property` → **QR Code Viewer**
+
+The generated string is written straight onto a content property that uses the **QR Code Viewer**
+editor, which displays it. No Media item is created and no file is written to disk — just a string
+on the content item. Use this unless you specifically need a Media item, per Option 2.
+
+**Option 2: Save it as a Media item**
+
+`Generate QR Code` → `Save QR Code to Media` → `Update Content Property` (bind `MediaUdi` to a
+Media Picker property)
+
+The string is converted into a real Media item (an `Image` or a `Vector Graphics (SVG)`, depending
+on the output format), which then needs to end up somewhere it can be referenced from — typically
+bound onto a Media Picker property. Reach for this when the QR code needs to behave like any other
+piece of media: browsable in the Media library, referenced from a Media Picker property, or reused
+by pointing more than one content item at the same media item.
 
 ### Generate QR Code
 
@@ -55,7 +86,7 @@ Add the **Generate QR Code** action to any automation and select the connection 
 | Field | Description |
 |---|---|
 | Value | The value to encode as a QR code — a URL, `tel:`/`mailto:`/`sms:` link, plain text, or anything else a scanner understands. Supports `${ binding }` expressions. Max 2000 characters. |
-| Output Format | Optional. `RawBase64Png` or `Svg`. Defaults to `RawBase64Png` if left unset. |
+| Output Format | Optional. `Svg` or `RawBase64Png`. Defaults to `Svg` if left unset. |
 | Size (pixels per module) | Optional. The size of each QR module in pixels, from 1 to 50. Only applies to PNG output. Defaults to 20. |
 | Error Correction Level | Optional. `L`, `M`, `Q`, or `H`. Higher levels tolerate more damage/obstruction but produce denser codes. Defaults to `Q`. |
 | Dark Color | Optional. The color of the dark modules, e.g. `#000000`. Defaults to black. |
@@ -68,7 +99,7 @@ The action outputs the following, which can be referenced via bindings in later 
 |---|---|
 | Value | The value that was encoded in the QR code. |
 | OutputFormat | The output format the QR code was rendered in, e.g. `RawBase64Png`. |
-| QrCode | The generated QR code content: a raw base64 string, a `data:image/png;base64,...` URI, or SVG markup, depending on the output format. |
+| QrCode | The generated QR code content: a raw base64 PNG string, or SVG markup, depending on the output format. |
 | MimeType | The MIME type of the generated QR code, e.g. `image/png` or `image/svg+xml`. |
 
 ### Save QR Code to Media
@@ -135,6 +166,7 @@ Then use it in any view:
 
 `value` and `alt` are the only special attributes — everything else you write on the tag (`class`,
 `width`, `height`, `data-*`, or anything else) passes straight through to the rendered element.
+
 Inline SVG has no native `alt` attribute, so when the underlying value is SVG markup, `alt` is
 applied as `role="img" aria-label="..."` on the `<svg>` instead — same accessibility intent as an
 `<img alt>`, just via the SVG-appropriate mechanism.

@@ -4,10 +4,10 @@
     "Name": "Paul Wright",
     "ImageUrl": "https://github.com/suedeapple.png",
     "Url": "https://www.suedeapple.co.uk",
-    "Description": "Paul Wright is an Umbraco Web Developer",
+    "Description": "Paul Wright is an Umbraco Web Developer"
   },
   "Category": "Editor Tools",
-  "Description": "QR code generation actions for Umbraco Automate, powered by QRCoder. Generate a QR code for a URL as part of an automation workflow.",
+  "Description": "QR code generation for Umbraco Automate, powered by QRCoder. Generate a QR code for any value as part of an automation workflow, then save it to media or store the value on a property and preview it with the QR Code Viewer property editor.",
   "ImageUrl": "https://github.com/suedeapple/SA.Automate.QRcode/blob/main/saAutomateQRCoder.png",
   "LicenseTypes": [ "Free" ],
   "IssueTrackerUrl": "https://github.com/suedeapple/SA.Automate.QRcode/issues",
