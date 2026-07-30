@@ -8,7 +8,37 @@
   },
   "Category": "Editor Tools",
   "Description": "QR code generation for Umbraco Automate, powered by QRCoder. Generate a QR code for any value as part of an automation workflow, then save it to media or store the value on a property and preview it with the QR Code Viewer property editor.",
-  "ImageUrl": "https://github.com/suedeapple/SA.Automate.QRcode/blob/main/saAutomateQRCoder.png",
+  "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/saAutomateQRCoder.png",
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/5.png",
+      "Caption": "Create a Data Type using the QR Code Viewer property editor"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/1.png",
+      "Caption": "Configure the Generate QR Code action - value, output format, size, error correction, colors, and quiet zone"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/2.png",
+      "Caption": "Bind Generate QR Code's output onto a QR Code Viewer property with Update Content Property"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/3.png",
+      "Caption": "The QR Code Viewer property displaying a generated QR code on a content item"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/4.png",
+      "Caption": "Render the QR code on the front end with the <qr-code> Tag Helper"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/6.png",
+      "Caption": "Configure the Save QR Code to Media action to save the QR code as a Media item"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/suedeapple/SA.Automate.QRcode/main/.github/images/7.png",
+      "Caption": "Bind Save QR Code to Media's output onto a Media Picker property with Update Content Property"
+    }
+  ],
   "LicenseTypes": [ "Free" ],
   "IssueTrackerUrl": "https://github.com/suedeapple/SA.Automate.QRcode/issues",
   "PackageType": "Package",
