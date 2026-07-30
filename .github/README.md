@@ -15,6 +15,7 @@ QR code generation actions for [Umbraco Automate](https://github.com/umbraco/Umb
 | **Save QR Code to Media** action | Saves a generated QR code as a real Media item (`Image` or `Vector Graphics (SVG)`). |
 | **QR Code Viewer** property editor | Read-only content property that displays a QR code written to it by a workflow. |
 | `<qr-code>` Tag Helper | Renders an already-generated QR code string as an `<img>` or inline `<svg>` in a Razor view. |
+| `QrCodeValue` property value converter | Lets Razor views read a QR Code Viewer property as a strongly-typed `QrCodeValue` instead of a raw string. |
 
 ## What can this be used for?
 
@@ -156,11 +157,15 @@ glance.
 ## Rendering in views
 
 This package also registers a `<qr-code>` Tag Helper for rendering an already-generated QR code
-string (e.g. a QR Code Viewer property's value, or `Generate QR Code`'s `QrCode` output) on the
-front end. It doesn't generate anything itself — no QRCoder call, no Automate involved — it just
-renders whatever string you give it as an `<img>` or inline `<svg>`, whichever the value actually is.
-It also accepts a QR Code Viewer property whose value is the `QrCodeViewerValue` JSON payload —
-it renders just the code and ignores the encoded value in that case.
+on the front end. It doesn't generate anything itself — no QRCoder call, no Automate involved — it
+just renders whatever it's given as an `<img>` or inline `<svg>`, whichever the code actually is.
+`value` accepts any of:
+
+- A raw code string — e.g. `Generate QR Code`'s `QrCode` output.
+- The `{"value":"...","qrCode":"..."}` JSON payload from `QrCodeViewerValue`.
+- A [`QrCodeValue`](#strongly-typed-access-in-razor) instance.
+
+In every case, only the code is rendered — the encoded value (where present) is ignored.
 
 Register it once in `_ViewImports.cshtml`:
 
@@ -176,6 +181,36 @@ Then use it in any view:
 
 `value` and `alt` are the only special attributes — everything else you write on the tag (`class`,
 `width`, `height`, `data-*`, or anything else) passes straight through to the rendered element.
+
+### Strongly-typed access in Razor
+
+This package also registers an `IPropertyValueConverter` for the QR Code Viewer editor, so instead
+of reading the raw string and having to know whether it's a plain code or the `QrCodeViewerValue`
+JSON payload, you can read a strongly-typed `QrCodeValue` (in `SA.Automate.QRcode.PropertyEditors`)
+with `QrCode` and `Value` properties — `Value` is `null` unless the property was populated from
+`QrCodeViewerValue`:
+
+```cshtml
+@using SA.Automate.QRcode.PropertyEditors
+@{ var qrCode = Model.Value<QrCodeValue>("qrCode"); }
+
+<qr-code value="@qrCode" class="qr-code" width="200" height="200" alt="Scan to view" />
+@if (qrCode?.Value is not null)
+{
+    <p>@qrCode.Value</p>
+}
+```
+
+With ModelsBuilder, the generated model exposes the property as a `QrCodeValue` directly — no
+`Model.Value<T>()` call needed:
+
+```cshtml
+<qr-code value="@Model.QrCode" class="qr-code" width="200" height="200" alt="Scan to view" />
+@if (Model.QrCode?.Value is not null)
+{
+    <p>@Model.QrCode.Value</p>
+}
+```
 
 Inline SVG has no native `alt` attribute, so when the underlying value is SVG markup, `alt` is
 applied as `role="img" aria-label="..."` on the `<svg>` instead — same accessibility intent as an
